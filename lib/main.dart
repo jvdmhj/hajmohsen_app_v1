@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hajmohsen/auth/login_page.dart';
+import 'package:hajmohsen/auth/entry_page.dart';
+import 'package:hajmohsen/users/providers/auth_providers.dart';
 import 'package:hajmohsen/users/providers/cart_providers.dart';
+import 'package:hajmohsen/users/providers/favorite_providers.dart';
 import 'package:provider/provider.dart';
 
 
@@ -10,7 +12,9 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=>CartProvider())
+        ChangeNotifierProvider(create: (_)=>CartProvider(),),
+        ChangeNotifierProvider(create: (_)=>FavoriteProviders(),),
+        ChangeNotifierProvider(create: (_)=>AuthProviders(),),
       ],
       child:MyApp() ,
       ),
@@ -42,7 +46,7 @@ class _MyAppState extends State<MyApp> {
       },
       debugShowCheckedModeBanner: false,
       title: 'HAJ MOHSEN',
-      home: const LoginPage(),
+      home: const EntryPage(),
     );
   }
 }

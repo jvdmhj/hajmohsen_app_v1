@@ -6,6 +6,30 @@ TextStyle regularpersian(BuildContext context) => TextStyle(
   color: Theme.of(context).colorScheme.onSurface,
   fontFamily: 'BNazanin',
 );
+TextStyle alertDialogStyle(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.035,
+  fontWeight: FontWeight.w200,
+  color: Theme.of(context).colorScheme.onSurface,
+  fontFamily: 'BNazanin',
+);
+TextStyle alertDialogStyleRemove(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.04,
+  fontWeight: FontWeight.w200,
+  color: Colors.red,
+  fontFamily: 'BNazanin',
+);
+TextStyle alertDialogStyleAdd(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.04,
+  fontWeight: FontWeight.w200,
+  color: Colors.blue,
+  fontFamily: 'BNazanin',
+);
+TextStyle alertDialogStyleCancel(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.035,
+  fontWeight: FontWeight.w200,
+  color: Colors.black,
+  fontFamily: 'BNazanin',
+);
 TextStyle choiceChipstyle(BuildContext context) => TextStyle(
   fontSize: MediaQuery.of(context).size.width * 0.035,
   fontWeight: FontWeight.bold,
@@ -45,6 +69,12 @@ TextStyle regularLatin(BuildContext context) => TextStyle(
   color: Theme.of(context).colorScheme.onSurface,
   fontFamily: 'PlayfairDisplay',
 );
+TextStyle userNameLatin(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.048,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+  fontFamily: 'PlayfairDisplay',
+);
 TextStyle h1(BuildContext context) => TextStyle(
   fontSize: MediaQuery.of(context).size.width * 0.045,
   fontWeight: FontWeight.bold,
@@ -74,6 +104,12 @@ TextStyle description(BuildContext context) => TextStyle(
   fontSize: MediaQuery.of(context).size.width * 0.04,
   fontWeight: FontWeight.bold,
   // color: const Color.fromARGB(255, 253, 152, 0),
+  fontFamily: 'BNazanin',
+  height: 1.8,
+);
+TextStyle showDialogStyle(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.05,
+  fontWeight: FontWeight.w500,
   fontFamily: 'BNazanin',
   height: 1.8,
 );

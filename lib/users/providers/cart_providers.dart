@@ -7,6 +7,11 @@ class CartProvider with ChangeNotifier{
 
   List<CartItem> get items => _items;
 
+    void clearAll() {
+      _items.clear();
+      notifyListeners();
+  }
+
   void addToCart(Product product,int quantity) {
       final index = _items.indexWhere(
       (item) => item.product == product,

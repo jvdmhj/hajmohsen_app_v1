@@ -3,7 +3,8 @@ import 'package:hajmohsen/auth/forget_pass_page.dart';
 import 'package:hajmohsen/auth/sign_up_page.dart';
 import 'package:hajmohsen/background/login_page_background.dart';
 import 'package:hajmohsen/styles/styles.dart';
-import 'package:hajmohsen/users/pages/main_page.dart';
+import 'package:hajmohsen/users/providers/auth_providers.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,24 +33,25 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void login() {
-    setState(() {
-      userNameErorr = userNameController.text.trim().isEmpty
-          ? 'نام کاربری نمیتواند خالی باشد '
-          : null;
-      passwordError = passwordController.text.trim().isEmpty
-          ? 'رمز عبور نمیتواند خالی باشد '
-          : passwordController.text.length < 6
-          ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
-          : null;
-    });
-    if (userNameErorr != null || passwordError != null) return;
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => MainPage()),
-      (route) => false,
-    );
-  }
+void login() {
+  setState(() {
+    userNameErorr = userNameController.text.trim().isEmpty
+        ? 'نام کاربری نمیتواند خالی باشد '
+        : null;
+
+    passwordError = passwordController.text.trim().isEmpty
+        ? 'رمز عبور نمیتواند خالی باشد '
+        : passwordController.text.length < 6
+            ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
+            : null;
+  });
+
+  if (userNameErorr != null || passwordError != null) return;
+
+
+   context.read<AuthProviders>().loggin(userNameController.text.trim());
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: size.height * 0.085),
                   Center(
                     child: Text(
-                      'برای هر لحظه، یک نوشیدنی مخصوص',
+                      'برای هر لحظه، یک نوشیدنی خاص',
                       style: TextStyle(
                         fontFamily: 'Besmellah',
                         fontSize: size.width * 0.065,

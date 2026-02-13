@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hajmohsen/models/product.dart';
 import 'package:hajmohsen/styles/styles.dart';
 import 'package:hajmohsen/users/pages/cart_page.dart';
+import 'package:hajmohsen/users/pages/favorites_page.dart';
 import 'package:hajmohsen/users/pages/items_detail_page.dart';
+import 'package:hajmohsen/users/providers/auth_providers.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,70 +24,70 @@ class _MainPageState extends State<MainPage> {
     Product(
       name: 'آب انار',
       title: 'آب انار تازه',
-      category: 'ابمیوه',
+      category: 'آبمیوه',
       price: 80,
       imageAddress: 'assets/images/juicepomegranate.jpeg',
       description:
           'نوشیدنی بسیار مغذی و سرشار از آنتی‌اکسیدان است که آنتی‌اکسیدان‌های آن حدود ۳ برابر بیشتر از چای سبز بوده و به تقویت سیستم ایمنی، سلامت قلب، کاهش فشار خون و بهبود حافظه کمک می‌کند',
     ),
     Product(
-      name: 'اب پرتقال',
-      title: 'اب پرتقال تازه',
-      category: 'ابمیوه',
+      name: 'آب پرتقال',
+      title: 'آب پرتقال تازه',
+      category: 'آبمیوه',
       price: 70,
       imageAddress: 'assets/images/orangejuice.jpg',
       description:
           'آب پرتقال طبیعی، نوشیدنی مغذی و سرشار از ویتامین C، پتاسیم، فولات و آنتی‌اکسیدان‌ها (فلاونوئیدها) است که سیستم ایمنی را تقویت کرده و به کاهش التهاب کمک می‌کند',
     ),
     Product(
-      name: 'اب طالبی',
-      title: 'اب طالبی تازه',
-      category: 'ابمیوه',
+      name: 'آب طالبی',
+      title: 'آب طالبی تازه',
+      category: 'آبمیوه',
       price: 75,
       imageAddress: 'assets/images/cantaloupejuice.jpg',
       description:
           'آب طالبی یک نوشیدنی تابستانی فوق‌العاده خنک، شیرین و مغذی است که با مخلوط کردن گوشت طالبی رسیده، یخ و در صورت تمایل شکر یا عسل تهیه می‌شود. این نوشیدنی سرشار از پتاسیم، ویتامین A و C بوده و با ۹۰٪ محتوای آب، برای رفع عطش و هیدراتاسیون بدن بسیار مفید است',
     ),
     Product(
-      name: 'اب هویج',
-      title: 'اب هویج تازه',
-      category: 'ابمیوه',
+      name: 'آب هویج',
+      title: 'آب هویج تازه',
+      category: 'آبمیوه',
       price: 55,
       imageAddress: 'assets/images/carrotjuice.jpg',
       description:
           'آب هویج نوشیدنی مغذی و خوشمزه‌ای است که سرشار از بتاکاروتن (پیش‌ساز ویتامین A)، ویتامین‌های C و B، پتاسیم و آنتی‌اکسیدان‌ها است و به تقویت سیستم ایمنی، بهبود سلامت چشم و پوست، و کمک به عملکرد کبد و دستگاه گوارش کمک می‌کند. این نوشیدنی به بازیابی عضلات، کنترل فشار خون و سم‌زدایی بدن نیز مفید است و به دلیل ارزش غذایی بالا، در طب سنتی نیز توصیه می‌شود',
     ),
     Product(
-      name: 'اب انبه',
-      title: 'اب انبه تازه',
-      category: 'ابمیوه',
+      name: 'آب انبه',
+      title: 'آب انبه تازه',
+      category: 'آبمیوه',
       price: 95,
       imageAddress: 'assets/images/mangojuice.jpg',
       description:
           'آب انبه یک نوشیدنی استوایی، غلیظ و مغذی است که از ترکیب پوره انبه رسیده، آب، یخ و به دلخواه شکر تهیه می‌شود. این نوشیدنی سرشار از ویتامین‌های A، C، E، K و آنتی‌اکسیدان‌ها است که به تقویت سیستم ایمنی، سلامت پوست و رفع گرمازدگی کمک می‌کند',
     ),
     Product(
-      name: 'اب کرفس',
-      title: 'اب کرفس تازه',
-      category: 'ابمیوه',
+      name: 'آب کرفس',
+      title: 'آب کرفس تازه',
+      category: 'آبمیوه',
       price: 80,
       imageAddress: 'assets/images/celeryjuice.jpg',
       description:
-          'آب کرفس نوشیدنی کم‌کالری (حدود ۱۶ تا ۴۰ کالری) و سرشار از ویتامین‌های \(K\)، \(C\)، پتاسیم و فولات است که با آبرسانی بالا، کاهش اشتها و سم‌زدایی بدن، به کاهش وزن و سلامت پوست کمک می‌کند [۱، ۴، ۸]. مصرف ناشتای آن التهاب را کاهش داده، فشار خون و کلسترول را مدیریت کرده و به دلیل داشتن ترکیبات ضد سرطان، سیستم ایمنی را تقویت می‌کند',
+          'آب کرفس نوشیدنی کم‌کالری (حدود ۱۶ تا ۴۰ کالری) و سرشار از ویتامین‌های (K)، (C)، پتاسیم و فولات است که با آبرسانی بالا، کاهش اشتها و سم‌زدایی بدن، به کاهش وزن و سلامت پوست کمک می‌کند [۱، ۴، ۸]. مصرف ناشتای آن التهاب را کاهش داده، فشار خون و کلسترول را مدیریت کرده و به دلیل داشتن ترکیبات ضد سرطان، سیستم ایمنی را تقویت می‌کند',
     ),
     Product(
-      name: 'اب هندوانه',
-      title: 'اب هندوانه تازه',
-      category: 'ابمیوه',
+      name: 'آب هندوانه',
+      title: 'آب هندوانه تازه',
+      category: 'آبمیوه',
       price: 65,
       imageAddress: 'assets/images/watermelonjuice.jpg',
       description:
           'آب هندوانه نوشیدنی خنک و مغذی تابستانی است که با داشتن ویتامین‌های A و C، پتاسیم و آنتی‌اکسیدان‌هایی مانند لیکوپن، به سلامت قلب، شادابی پوست و افزایش انرژی کمک می‌کند. این نوشیدنی کم‌کالری (حدود ۷۰ کالری در هر فنجان) را می‌توان به‌راحتی با مخلوط‌کن یا آبکش تهیه کرد و برای طعم بهتر با لیموترش یا نعناع سرو کرد',
     ),
     Product(
-      name: 'اب سیب',
-      title: 'اب سیب تازه',
-      category: 'ابمیوه',
+      name: 'آب سیب',
+      title: 'آب سیب تازه',
+      category: 'آبمیوه',
       price: 70,
       imageAddress: 'assets/images/applejuice.jpg',
       description:
@@ -93,7 +96,7 @@ class _MainPageState extends State<MainPage> {
     Product(
       name: 'شیرموز',
       title: 'شیرموز تازه',
-      category: 'ابمیوه',
+      category: 'آبمیوه',
       price: 70,
       imageAddress: 'assets/images/milk&banana.jpg',
       description:
@@ -102,7 +105,7 @@ class _MainPageState extends State<MainPage> {
     Product(
       name: 'شیرخرما',
       title: 'شیرخرما تازه',
-      category: 'ابمیوه',
+      category: 'آبمیوه',
       price: 100,
       imageAddress: 'assets/images/milk&dates.jpg',
       description:
@@ -111,7 +114,7 @@ class _MainPageState extends State<MainPage> {
     Product(
       name: 'شیر پسته',
       title: 'شیرپسته تازه',
-      category: 'ابمیوه',
+      category: 'آبمیوه',
       price: 110,
       imageAddress: 'assets/images/pistachio&milk.jpg',
       description:
@@ -120,7 +123,7 @@ class _MainPageState extends State<MainPage> {
     Product(
       name: 'معجون',
       title: 'معجون تازه',
-      category: 'ابمیوه',
+      category: 'آبمیوه',
       price: 210,
       imageAddress: 'assets/images/potion.jpg',
       description:
@@ -191,7 +194,7 @@ class _MainPageState extends State<MainPage> {
       price: 185,
       imageAddress: 'assets/images/chocolate.jpg',
       description:
-          'میلک‌شیک شکلاتی یک نوشیدنی سرد و شیرین است که از ترکیب بستنی (معمولاً وانیلی یا شکلاتی)، شیر و سس یا پودر شکلات با استفاده از مخلوط‌کن تهیه می‌شود. این نوشیدنی که در اوایل قرن بیستم در آمریکا ابداع شد، انرژی بالایی دارد و معمولاً حاوی حدود \(\) کیلوکالری انرژی در هر \(\) گرم است',
+          'میلک‌شیک شکلاتی یک نوشیدنی سرد و شیرین است که از ترکیب بستنی (معمولاً وانیلی یا شکلاتی)، شیر و سس یا پودر شکلات با استفاده از مخلوط‌کن تهیه می‌شود. این نوشیدنی که در اوایل قرن بیستم در آمریکا ابداع شد، انرژی بالایی دارد و معمولاً حاوی حدود () کیلوکالری انرژی در هر () گرم است',
     ),
     Product(
       name: 'میوه ای',
@@ -348,7 +351,7 @@ class _MainPageState extends State<MainPage> {
           'ساندویچ کوکتل یک نوع ساندویچ سوسیس پرطرفدار است که با استفاده از سوسیس کوکتل (سوسیس‌های کوچک) تهیه می‌شود. این ساندویچ معمولاً به صورت گرم، همراه با نان باگت، خیارشور، گوجه‌فرنگی و انواع سس سرو می‌شود. سوسیس کوکتل خود ترکیبی از گوشت، چربی، ادویه، نمک، نیتریت سدیم و گاهی پنیر پیتزا است که ارزش غذایی حدود ۲۰۰ کیلوکالری در هر ۱۰۰ گرم دارد',
     ),
   ];
-  List<String> categories = ['همه', 'ابمیوه', 'بستنی', 'شیک', 'ساندویچ'];
+  List<String> categories = ['همه', 'آبمیوه', 'بستنی', 'شیک', 'ساندویچ'];
   String selectedCategory = 'همه';
 
   List<Product> get fillteredProduct {
@@ -376,7 +379,7 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: const Color.fromARGB(255, 255, 245, 230),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(255, 255, 245, 230),
         elevation: 0,
         leading: Builder(
           builder: (context) => IconButton(
@@ -407,27 +410,58 @@ class _MainPageState extends State<MainPage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.amber),
-              child: Text(
-                'منو',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Colors.amber),
+              child: Consumer<AuthProviders>(
+                builder: (context, auth, child) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.person, size: 40, color: Colors.white),
+                      const SizedBox(height: 10),
+                      Text(auth.username, style: userNameLatin(context)),
+                    ],
+                  );
+                },
               ),
             ),
+
             ListTile(
               leading: const Icon(Icons.shopping_cart),
-              title: const Text('سبد خرید'),
+              title: Text('سبد خرید', style: regularpersian(context)),
               onTap: () {
-                Navigator.pop(context); // اول Drawer بسته شود
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const CartPage()),
                 );
               },
             ),
+
+            ListTile(
+              leading: const Icon(Icons.bookmark),
+              title: Text('علاقه مندی ها', style: regularpersian(context)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const FavoritesPage()),
+                );
+              },
+            ),
+
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: Text('خروج', style: alertDialogStyleRemove(context)),
+              onTap: () {
+                context.read<AuthProviders>().logOut();
+              },
+            ),
           ],
         ),
       ),
+
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -462,7 +496,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ),
 
-                      SizedBox(height: size.height * 0.01),
+                      SizedBox(height: size.width * 0.02),
 
                       Align(
                         alignment: Alignment.centerRight,
@@ -475,7 +509,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ),
 
-                      SizedBox(height: size.height * 0.03),
+                      SizedBox(height: size.width * 0.06),
 
                       TextField(
                         controller: controller,
@@ -517,7 +551,7 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ),
 
-                      SizedBox(height: size.height * 0.025),
+                      SizedBox(height: size.width * 0.08),
 
                       SizedBox(
                         height: size.height * 0.05,
@@ -597,7 +631,7 @@ class _MainPageState extends State<MainPage> {
 
 Widget girdItemCard(BuildContext context, Product product) {
   final size = MediaQuery.of(context).size;
-    String toPersianNumber(num input) {
+  String toPersianNumber(num input) {
     final english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     final persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     String result = input.toString();
@@ -606,6 +640,7 @@ Widget girdItemCard(BuildContext context, Product product) {
     }
     return result;
   }
+
   return GestureDetector(
     onTap: () {
       Navigator.push(
