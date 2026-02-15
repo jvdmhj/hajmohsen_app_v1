@@ -21,7 +21,30 @@ class Product {
     this.userRating = 0,
   });
 
-
   double get averageRating =>
       ratingCount == 0 ? 0 : totalRating / ratingCount;
+
+      Map<String,dynamic>toJson() {
+          return {
+        'name' :name,
+        'title' :title,
+        'category':category,
+        'price' :price,
+        'imageAddress' :imageAddress,
+        'description' :description,
+        'totalRating' :totalRating,
+        'ratingCount' :ratingCount,
+        'userRating' :userRating,
+          };
+      }
+
+      factory Product.fromJson(Map<String , dynamic>json){
+        return Product(
+          name: json['name'],
+        title: json['title'],
+        category: json['category'],
+        price: json['price'],
+        imageAddress:json['imageAddress'],
+         description: json['description']);
+      }
 }

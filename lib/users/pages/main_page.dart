@@ -407,58 +407,61 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(color: Colors.amber),
-              child: Consumer<AuthProviders>(
-                builder: (context, auth, child) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.person, size: 40, color: Colors.white),
-                      const SizedBox(height: 10),
-                      Text(auth.username, style: userNameLatin(context)),
-                    ],
+        child: Container(
+          decoration: BoxDecoration(color: Color.fromARGB(255, 255, 245, 230)),
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: const BoxDecoration(color: Colors.amberAccent),
+                child: Consumer<AuthProviders>(
+                  builder: (context, auth, child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.person, size: 40, color: Colors.black),
+                        const SizedBox(height: 10),
+                        Text(auth.username, style: userNameLatin(context)),
+                      ],
+                    );
+                  },
+                ),
+              ),
+
+              ListTile(
+                leading: const Icon(Icons.shopping_cart),
+                title: Text('سبد خرید', style: regularpersian(context)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CartPage()),
                   );
                 },
               ),
-            ),
 
-            ListTile(
-              leading: const Icon(Icons.shopping_cart),
-              title: Text('سبد خرید', style: regularpersian(context)),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const CartPage()),
-                );
-              },
-            ),
+              ListTile(
+                leading: const Icon(Icons.bookmark),
+                title: Text('علاقه مندی ها', style: regularpersian(context)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const FavoritesPage()),
+                  );
+                },
+              ),
 
-            ListTile(
-              leading: const Icon(Icons.bookmark),
-              title: Text('علاقه مندی ها', style: regularpersian(context)),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const FavoritesPage()),
-                );
-              },
-            ),
-
-            ListTile(
-              leading: const Icon(Icons.logout),
-              title: Text('خروج', style: alertDialogStyleRemove(context)),
-              onTap: () {
-                context.read<AuthProviders>().logOut();
-              },
-            ),
-          ],
+              ListTile(
+                leading: const Icon(Icons.logout, color: Colors.red),
+                title: Text('خروج', style: alertDialogStyleRemove(context)),
+                onTap: () {
+                  context.read<AuthProviders>().logOut();
+                },
+              ),
+            ],
+          ),
         ),
       ),
 

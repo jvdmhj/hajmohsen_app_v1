@@ -72,7 +72,7 @@ TextStyle regularLatin(BuildContext context) => TextStyle(
 TextStyle userNameLatin(BuildContext context) => TextStyle(
   fontSize: MediaQuery.of(context).size.width * 0.048,
   fontWeight: FontWeight.w700,
-  color: Colors.white,
+  color: Colors.black,
   fontFamily: 'PlayfairDisplay',
 );
 TextStyle h1(BuildContext context) => TextStyle(
