@@ -12,10 +12,22 @@ TextStyle alertDialogStyle(BuildContext context) => TextStyle(
   color: Theme.of(context).colorScheme.onSurface,
   fontFamily: 'BNazanin',
 );
+TextStyle contentStyle(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.035,
+  fontWeight: FontWeight.w200,
+  color: const Color.fromARGB(255, 253, 152, 0),
+  fontFamily: 'BNazanin',
+);
 TextStyle alertDialogStyleRemove(BuildContext context) => TextStyle(
   fontSize: MediaQuery.of(context).size.width * 0.04,
   fontWeight: FontWeight.w200,
   color: Colors.red,
+  fontFamily: 'BNazanin',
+);
+TextStyle alertDialogStyleRemoveLogin(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.04,
+  fontWeight: FontWeight.w200,
+   color: const Color.fromARGB(255, 253, 152, 0),
   fontFamily: 'BNazanin',
 );
 TextStyle alertDialogStyleAdd(BuildContext context) => TextStyle(
@@ -113,12 +125,21 @@ TextStyle showDialogStyle(BuildContext context) => TextStyle(
   fontFamily: 'BNazanin',
   height: 1.8,
 );
+TextStyle showDialogStyleLogin(BuildContext context) => TextStyle(
+  fontSize: MediaQuery.of(context).size.width * 0.05,
+  fontWeight: FontWeight.w500,
+  color: const Color.fromARGB(255, 253, 152, 0),
+  fontFamily: 'BNazanin',
+  height: 1.8,
+);
 Widget buildUserNameTextInput(
   BuildContext context,
   TextEditingController controller,
   String hinttext, {
   bool obscureText = false,
   String? errorText,
+  FocusNode? focusNode,
+  VoidCallback? onTapFunction,
 }) {
   return TextField(
     controller: controller,
@@ -126,7 +147,8 @@ Widget buildUserNameTextInput(
     obscureText: obscureText,
     style: regularLatin(context),
     cursorColor: Color(0XFF1B1B1E),
-
+    focusNode: focusNode,
+      onTap: onTapFunction,
     decoration: InputDecoration(
       hintText: hinttext,
       hintStyle: hintTextStyle(context),

@@ -3,6 +3,7 @@ import 'package:hajmohsen/auth/login_page.dart';
 import 'package:hajmohsen/background/login_page_background.dart';
 import 'package:hajmohsen/styles/styles.dart';
 import 'package:hajmohsen/users/pages/main_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -36,43 +37,57 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  void signup() {
-    setState(() {
-      userNameErorr = userNameController.text.trim().isEmpty
-          ? 'نام کاربری نمیتواند خالی باشد '
-          : null;
+void signup() async {
+  setState(() {
+    userNameErorr = userNameController.text.trim().isEmpty
+        ? 'نام کاربری نمیتواند خالی باشد '
+        : null;
 
-      phoneNumberError = phoneNumberController.text.trim().isEmpty
-          ? 'شماره تماس نمیتواند خالی باشد '
-          : RegExp(
-              r'^(?:\+98|0098|0)?9\d{9}$',
-            ).hasMatch(phoneNumberController.text.trim())
-          ? 'شماره تماس معتبر نیست'
-          : null;
+    phoneNumberError = phoneNumberController.text.trim().isEmpty
+        ? 'شماره تماس نمیتواند خالی باشد'
+        : !RegExp(r'^(?:\+98|0098|0)?9\d{9}$')
+            .hasMatch(phoneNumberController.text.trim())
+        ? 'شماره تماس معتبر نیست'
+        : null;
 
-      passwordError = passwordController.text.trim().isEmpty
-          ? 'رمز عبور نمیتواند خالی باشد '
-          : passwordController.text.length < 6
-          ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
-          : null;
+    passwordError = passwordController.text.trim().isEmpty
+        ? 'رمز عبور نمیتواند خالی باشد '
+        : passwordController.text.length < 6
+        ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
+        : null;
 
-      repasswordError = repasswordController.text.trim().isEmpty
-          ? 'رمز عبور نمیتواند خالی باشد '
-          : repasswordController.text.length < 6
-          ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
-          : null;
+    repasswordError = repasswordController.text.trim().isEmpty
+        ? 'رمز عبور نمیتواند خالی باشد '
+        : repasswordController.text.length < 6
+        ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
+        : null;
 
-      passwordError = passwordController != repasswordController
-          ? 'تکرار رمز عبور با رمز عبور تطابق ندارد'
-          : null;
-    });
-    if (userNameErorr != null || passwordError != null) return;
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => MainPage()),
-      (route) => false,
-    );
-  }
+    if (passwordController.text != repasswordController.text) {
+      repasswordError = 'تکرار رمز عبور با رمز عبور تطابق ندارد';
+    }
+  });
+
+  if (userNameErorr != null || phoneNumberError != null ||
+      passwordError != null || repasswordError != null){
+         return;
+      }
+
+
+  await saveData();
+
+  if(!mounted)return;
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (_) => MainPage()),
+    (route) => false,
+  );
+}
+
+Future<void> saveData() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('username', userNameController.text.trim());
+  await prefs.setString('password', passwordController.text.trim());
+}
 
   @override
   Widget build(BuildContext context) {

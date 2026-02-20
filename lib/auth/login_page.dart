@@ -5,6 +5,7 @@ import 'package:hajmohsen/background/login_page_background.dart';
 import 'package:hajmohsen/styles/styles.dart';
 import 'package:hajmohsen/users/providers/auth_providers.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,15 +16,17 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController userNameController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
+  final FocusNode _userNameFocusNode = FocusNode();
   String? userNameErorr;
   String? passwordError;
   bool showPassword = true;
+ 
   @override
   void dispose() {
     userNameController.dispose();
     passwordController.dispose();
+    _userNameFocusNode.dispose();
     super.dispose();
   }
 
@@ -33,25 +36,81 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-void login() {
-  setState(() {
-    userNameErorr = userNameController.text.trim().isEmpty
-        ? 'نام کاربری نمیتواند خالی باشد '
-        : null;
+  @override
+  void initState() {
+    super.initState();
+  }
 
-    passwordError = passwordController.text.trim().isEmpty
-        ? 'رمز عبور نمیتواند خالی باشد '
-        : passwordController.text.length < 6
-            ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
-            : null;
-  });
+  void login() async {
+   FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      userNameErorr = userNameController.text.trim().isEmpty
+          ? 'نام کاربری نمیتواند خالی باشد '
+          : null;
 
-  if (userNameErorr != null || passwordError != null) return;
+      passwordError = passwordController.text.trim().isEmpty
+          ? 'رمز عبور نمیتواند خالی باشد '
+          : passwordController.text.length < 6
+          ? 'رمز عبور نمیتواند کمتر از ۶ رقم باشد'
+          : null;
+    });
 
+    if (userNameErorr != null || passwordError != null) return;
 
-   context.read<AuthProviders>().loggin(userNameController.text.trim());
-}
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedUserName = prefs.getString('username');
+    final String? savedPassword = prefs.getString('password');
 
+    if (userNameController.text != savedUserName ||
+        passwordController.text != savedPassword) {
+      if (!mounted) return;
+      final shouldSave = await showDialog<bool>(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text('ذخیره اطلاعات', style: showDialogStyleLogin(context)),
+            content: Text(
+              'مایل هستید اطلاعات ذخیره شود؟',
+              style: alertDialogStyle(context),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text('خیر', style: alertDialogStyle(context)),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: Text('بله', style: alertDialogStyleRemoveLogin(context)),
+              ),
+            ],
+          );
+        },
+      );
+      if (shouldSave == true) {
+        await saveData();
+      }
+    }
+
+    if (!mounted) return;
+    context.read<AuthProviders>().loggin(userNameController.text.trim());
+  }
+
+  Future<void> saveData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', userNameController.text);
+    prefs.setString('password', passwordController.text);
+  }
+
+  // Future<void> loadData() async {
+  //   final prefs=await SharedPreferences.getInstance();
+  //   final String? savedUserName = prefs.getString('username');
+  //   final String? savedPassword = prefs.getString('password');
+
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +166,56 @@ void login() {
                     child: buildUserNameTextInput(
                       context,
                       userNameController,
+                      focusNode: _userNameFocusNode,
+                      onTapFunction: () async {
+                        _userNameFocusNode.unfocus();
+                        final prefs = await SharedPreferences.getInstance();
+                        final savedUserName = prefs.getString('username');
+                        final savedPassword = prefs.getString('password');
+                        if (savedUserName != null || savedPassword != null) {
+                          if (!context.mounted) return;
+                          final shouldAutofill = await showDialog<bool>(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text('اطلاعات ذخیره شده یافت شد',
+                                style: showDialogStyleLogin(context)
+                                ),
+                                content: Text('مایل به پر کردن خودکار هستید؟',
+                                style: alertDialogStyle(context)
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text('خیر',
+                                    style: alertDialogStyle(context)
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: Text('بله',
+                                    style: alertDialogStyleRemoveLogin(context)
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          if (shouldAutofill == true) {
+                            userNameController.text = savedUserName!;
+                            passwordController.text = savedPassword!;
+                          } else {
+                            if (!context.mounted) return;
+                            FocusScope.of(
+                              context,
+                            ).requestFocus(_userNameFocusNode);
+                          }
+                        }
+                      },
                       'لطفا نام کاربری خود را وارد کنید',
                       errorText: userNameErorr,
                     ),

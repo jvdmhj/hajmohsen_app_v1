@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hajmohsen/models/product.dart';
-import 'package:hajmohsen/styles/VerticalCounter.dart';
+import 'package:hajmohsen/styles/vertical_counter.dart';
 import 'package:hajmohsen/styles/styles.dart';
 import 'package:hajmohsen/users/providers/cart_providers.dart';
 import 'package:hajmohsen/users/providers/favorite_providers.dart';
