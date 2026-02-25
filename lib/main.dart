@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hajmohsen/auth/entry_page.dart';
+import 'package:hajmohsen/auth/login_page.dart';
+import 'package:hajmohsen/users/pages/main_page.dart';
 import 'package:hajmohsen/users/providers/auth_providers.dart';
 import 'package:hajmohsen/users/providers/cart_providers.dart';
 import 'package:hajmohsen/users/providers/favorite_providers.dart';
@@ -46,7 +47,15 @@ class _MyAppState extends State<MyApp> {
       },
       debugShowCheckedModeBanner: false,
       title: 'HAJ MOHSEN',
-      home: const EntryPage(),
+      home: Consumer<AuthProviders>(
+        builder:(context,auth,_) {
+          debugPrint('is login:${auth.isLogedIn}');
+            if(auth.isLogedIn){
+        return MainPage();
+      }else{
+          return LoginPage();
+      }
+        } )
     );
   }
 }

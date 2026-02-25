@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hajmohsen/auth/forget_pass_page.dart';
 import 'package:hajmohsen/auth/sign_up_page.dart';
 import 'package:hajmohsen/background/login_page_background.dart';
+import 'package:hajmohsen/database/db_helper.dart';
 import 'package:hajmohsen/styles/styles.dart';
+import 'package:hajmohsen/users/pages/main_page.dart';
 import 'package:hajmohsen/users/providers/auth_providers.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   String? userNameErorr;
   String? passwordError;
   bool showPassword = true;
- 
+
   @override
   void dispose() {
     userNameController.dispose();
@@ -57,46 +59,30 @@ class _LoginPageState extends State<LoginPage> {
 
     if (userNameErorr != null || passwordError != null) return;
 
-    final prefs = await SharedPreferences.getInstance();
-    final String? savedUserName = prefs.getString('username');
-    final String? savedPassword = prefs.getString('password');
+     final user = await DbHelper.getUser(
+  userNameController.text.trim(),
+  passwordController.text.trim(),
+);
 
-    if (userNameController.text != savedUserName ||
-        passwordController.text != savedPassword) {
-      if (!mounted) return;
-      final shouldSave = await showDialog<bool>(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text('ذخیره اطلاعات', style: showDialogStyleLogin(context)),
-            content: Text(
-              'مایل هستید اطلاعات ذخیره شود؟',
-              style: alertDialogStyle(context),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, false);
-                },
-                child: Text('خیر', style: alertDialogStyle(context)),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                child: Text('بله', style: alertDialogStyleRemoveLogin(context)),
-              ),
-            ],
-          );
-        },
-      );
-      if (shouldSave == true) {
-        await saveData();
-      }
-    }
 
-    if (!mounted) return;
-    context.read<AuthProviders>().loggin(userNameController.text.trim());
+if (user != null) {
+
+  if (!mounted) return;
+
+  context.read<AuthProviders>().loggin(user['username']);
+
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (_) => const MainPage()),
+  );
+} else {
+  if (!mounted) return;
+  
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('نام کاربری یا رمز اشتباه است')),
+  );
+}
+
   }
 
   Future<void> saveData() async {

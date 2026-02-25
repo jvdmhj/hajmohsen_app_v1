@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hajmohsen/auth/login_page.dart';
 import 'package:hajmohsen/background/login_page_background.dart';
+import 'package:hajmohsen/database/db_helper.dart';
 import 'package:hajmohsen/styles/styles.dart';
 import 'package:hajmohsen/users/pages/main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,14 +74,44 @@ void signup() async {
       }
 
 
-  await saveData();
 
-  if(!mounted)return;
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (_) => MainPage()),
-    (route) => false,
+
+  final existingUser =
+      await DbHelper.getByUserName(userNameController.text.trim());
+
+  if (existingUser != null) {
+    if(!mounted)return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('این نام قبلاً ثبت شده')),
+    );
+    return;
+  }
+
+
+  final success = await DbHelper.insertuser(
+    userNameController.text.trim(),
+    passwordController.text.trim(),
   );
+
+  if (success) {
+    if(!mounted)return;
+     Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (_) => const MainPage()),
+    );
+
+
+    userNameController.clear();
+    phoneNumberController.clear();
+    passwordController.clear();
+    repasswordController.clear();
+
+  } else {
+    if(!mounted)return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('خطا در ثبت نام')),
+    );
+  }
 }
 
 Future<void> saveData() async {
